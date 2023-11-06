@@ -3,41 +3,39 @@
 <head>
     <title>Detector de Amplitud de Voz</title>
     <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+        }
 
-body, html {
-    margin: 0;
-    padding: 0;
-}
-     body {
-    background-color: black;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    /* height: 100vh; */ /* Eliminado para alinear el contenido en la parte superior */
-}
+        body {
+            background-color: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
 
-#startButton {
-    background-color: #3498db;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    margin: 10px 0 0; /* Ajustado el margen superior y eliminado el margen inferior */
-}
+        #startButton {
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px 0 0;
+        }
 
-#container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 10px; /* Ajustado el margen superior del contenedor */
-}
+        #container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
 
         #video1, #video2, #video3, #video4 {
-            width: 100%; /* Cambio el ancho de los videos para que ocupen el 100% del contenedor */
-           /* max-width: 400px; *//* Limito el ancho máximo para mantener la legibilidad */
-            height: auto; /* Para mantener la proporción original */
-            margin: 10px; /* Espacio entre los videos */
+            width: 100%;
+            height: auto;
+            margin: 10px;
         }
     </style>
 </head>
@@ -69,7 +67,6 @@ body, html {
             ];
             let currentVideoIndex = 0;
 
-            // Elementos de la barra de volumen
             const volumeBar = document.getElementById('volumeBar');
             const volumeLevel = document.getElementById('volumeLevel');
 
@@ -87,59 +84,38 @@ body, html {
                         analyser.getByteFrequencyData(dataArray);
                         const amplitude = calculateAmplitude(dataArray);
 
-                        // Actualizar la escala de la barra de volumen
-                        const maxAmplitude = 255; // Valor máximo para la amplitud
+                        const maxAmplitude = 255;
                         const scale = amplitude / maxAmplitude;
                         volumeLevel.style.transform = `scaleY(${scale})`;
 
-                    // Condición para video 1 (amplitude > 150)
-                    if (currentVideoIndex === 0 && amplitude > 4000) {
-                            videos[currentVideoIndex].playbackRate = 1.0; // Velocidad original
+                        if (currentVideoIndex === 0 && amplitude > 4000) {
+                            videos[currentVideoIndex].playbackRate = 1.0;
                         } else if (currentVideoIndex === 0) {
-                            videos[currentVideoIndex].playbackRate = 0.3; // Velocidad más lenta
+                            videos[currentVideoIndex].playbackRate = 0.3;
                         }
-                        
-                        // Condición para video 2 (amplitude > 180)
+
                         if (currentVideoIndex === 1 && amplitude > 5000) {
-                            videos[currentVideoIndex].playbackRate = 1.0; // Velocidad original
+                            videos[currentVideoIndex].playbackRate = 1.0;
                         } else if (currentVideoIndex === 1) {
-                            videos[currentVideoIndex].playbackRate = 0.2; // Velocidad más lenta
+                            videos[currentVideoIndex].playbackRate = 0.2;
                         }
-                        
-                        // Condición para video 3 (amplitude > 200)
+
                         if (currentVideoIndex === 2 && amplitude > 5500) {
-                            videos[currentVideoIndex].playbackRate = 1.0; // Velocidad original
+                            videos[currentVideoIndex].playbackRate = 1.0;
                         } else if (currentVideoIndex === 2) {
-                            videos[currentVideoIndex].playbackRate = 0.1; // Velocidad más lenta
+                            videos[currentVideoIndex].playbackRate = 0.1;
                         }
-                        
-                        // Condición para video 4 (amplitude > 220)
+
                         if (currentVideoIndex === 3 && amplitude > 6000) {
-                            videos[currentVideoIndex].playbackRate = 1.0; // Velocidad original
+                            videos[currentVideoIndex].playbackRate = 1.0;
                         } else if (currentVideoIndex === 3) {
-                            videos[currentVideoIndex].playbackRate = 0; // Velocidad más lenta
+                            videos[currentVideoIndex].playbackRate = 0;
                         }
 
-                       /* if (amplitude > 80) {
-                            canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-                            canvasContext.fillStyle = 'red';
-                            canvasContext.fillRect(50, 50, 100, 100);
-                        } else {
-                            canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-                        }*/
-
-                        // Verificar si el video actual ha terminado
                         if (videos[currentVideoIndex].ended) {
-                            // Ocultar el video actual
                             videos[currentVideoIndex].style.display = 'none';
-
-                            // Pasar al siguiente video (cíclicamente)
                             currentVideoIndex = (currentVideoIndex + 1) % videos.length;
-
-                            // Mostrar el nuevo video
                             videos[currentVideoIndex].style.display = 'block';
-
-                            // Reiniciar el video
                             videos[currentVideoIndex].currentTime = 0;
                             videos[currentVideoIndex].play();
                         }
@@ -155,9 +131,6 @@ body, html {
         }
 
         function calculateAmplitude(dataArray) {
-            // Calcula la amplitud en función de los datos de la matriz.
-            // Puedes implementar una lógica personalizada aquí.
-            // Por ejemplo, calcular la suma de los valores en dataArray.
             const sum = dataArray.reduce((a, b) => a + b);
             return sum;
         }
